@@ -24,17 +24,17 @@ case class EllipticCurve[T : Field](a: T, b: T) {
   }
 
   implicit def isGroup = new Group[Point] {
-    val zero = Infinity
+    val identity = Infinity
 
-    def neg(p: Point) = p match {
+    def inverse(p: Point) = p match {
       case Infinity => Infinity
       case Point(x, y) => Point(x, -y)
     }
 
-    def plus(j: Point, k: Point) = (j, k) match {
+    def operation(j: Point, k: Point) = (j, k) match {
       case (j, Infinity) => j
       case (Infinity, k) => k
-      case (j, k) if j == neg(k) => Infinity
+      case (j, k) if j == inverse(k) => Infinity
 
       case (j@Point(xⱼ, yⱼ), k) if j == k  =>
         val s  = (3*(xⱼ^2) + a) / (2 * yⱼ)
