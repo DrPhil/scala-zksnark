@@ -5,15 +5,10 @@ case class EllipticCurve[T : Field](a: T, b: T) {
 
   sealed trait Point
   case class FinitePoint(x: T, y: T) extends Point {
+    require((y^2) == (x^3) + x*a + b, "The point is not on the curve!")
     override def productPrefix = "Point"
   }
   case object Infinity extends Point
-
-  def isOnCurve(p: Point): Boolean = p match {
-    case Infinity => true
-    case FinitePoint(x, y) =>
-      (y^2) == (x^3) + x*a + b
-  }
 
   object Point {
     def apply(x: T, y: T): Point = FinitePoint(x, y)

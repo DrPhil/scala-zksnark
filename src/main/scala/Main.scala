@@ -71,7 +71,7 @@ object Main extends App {
     val field = Fₚ(2)
     import field._
 
-    // d = x⁸ + x⁴ + x³ + x + 1
+    // x⁸ + x⁴ + x³ + x + 1
     val extendedField = Fₚⁿ(1, 0, 0, 0, 1, 1, 0, 1, 1)
     import extendedField._
 
@@ -83,7 +83,34 @@ object Main extends App {
 
     val inv = one / y
     println("In a simply extended finite field every polynomial has an inverse.")
-    println(s"$y = $one / $inv")
+    println(s"$y = $one / $inv\n")
     assert(y * inv == one)
+  }
+
+  {
+    val field = Fₚ(257)
+    import field._
+
+    // x¹² - 18x⁶ + 82
+    val extendedField = Fₚⁿ(1, 0, 0, 0, 0, 0, -18, 0, 0, 0, 0, 0, 82)
+    import extendedField._
+
+    val curve = EllipticCurve[ℤ](-1, 1)
+    val extendedCurve = EllipticCurve[Z](Z(-1), Z(1))
+
+    val c1 = curve.Point(0, 1)
+    val e1 = extendedCurve.Point(Z(0), Z(1))
+
+    import Group.AdditiveSyntax
+
+    println("Points that are on the non-extended curve stays on the non-extended curve!")
+
+    {
+      import curve._
+      println(c1 * 4)
+    }
+
+    import extendedCurve._
+    println(e1 * 4)
   }
 }
