@@ -38,7 +38,9 @@ case class Fₚ(mod: BigInt) {
       "Polynomial must have 1 as leading coefficient!"
     )
 
-    case class Z private (poly: Polynomial[ℤ])
+    case class Z private (poly: Polynomial[ℤ]) {
+      def apply(n: Int) = poly(n)
+    }
 
     object Z {
       import ℤ.isField
