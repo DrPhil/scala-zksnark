@@ -45,7 +45,7 @@ case class Fₚ(mod: BigInt) {
     object Z {
       import ℤ.isField
 
-      def apply(poly: Polynomial[ℤ]) = new Z(poly.divrem(quotient)._2)
+      def apply(poly: Polynomial[ℤ]) = new Z(poly.fastrem(quotient))
       def apply(zs: ℤ*): Z = apply(Polynomial(zs))
 
       val isAdditiveGroup = new Group[Z] {

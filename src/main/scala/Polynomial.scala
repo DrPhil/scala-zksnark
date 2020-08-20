@@ -4,6 +4,8 @@ case class Polynomial[T : Field] private (vs: Seq[T]) {
   import Polynomial.isAdditiveGroup
   import Group.AdditiveSyntax
 
+  lazy val cache: Seq[Polynomial[T]] = for (i <- 0 to 2*degree) yield Polynomial.monomial(one, i).divrem(this)._2
+
   val degree = vs.length - 1
   lazy val leadingCoefficient: T = apply(degree)
 
@@ -41,6 +43,18 @@ case class Polynomial[T : Field] private (vs: Seq[T]) {
     }
 
     (quotient, remainder)
+  }
+
+  def fastrem(divisor: Polynomial[T]): Polynomial[T] = {
+
+    var remainder = this
+
+    while (remainder.degree >= divisor.degree) {
+      remainder += divisor.cache(remainder.degree).timesConstant(remainder.leadingCoefficient)
+      remainder = Polynomial(remainder.vs.tail)
+    }
+
+    remainder
   }
 
   override def toString: String = {

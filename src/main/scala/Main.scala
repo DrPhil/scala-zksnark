@@ -114,64 +114,64 @@ object Main extends App {
     println(e1 * 4)
   }
 
+  {
+    println("\nWe have the fields f, f2, f12")
+    println("the curves b, b2, b12")
+    println("and \"generators\" g1 and g2")
+
     {
-        println("\nWe have the fields f, f2, f12")
-        println("the curves b, b2, b12")
-        println("and \"generators\" g1 and g2")
+      import Group.AdditiveSyntax
+      import Bls12.b._
 
-        {
-            import Group.AdditiveSyntax
-            import Bls12.b._
-
-            println("\nThe points g and g2 both have order q.")
-            assert(Bls12.g * Bls12.q == Bls12.b.Infinity)
-        }
-
-        val g12 = Bls12.twist(Bls12.g2)
-
-        {
-            println("\nWe can twist any point on b2 to a point on b12.")
-            println("The points keeps their order after twisting.")
-
-            import Group.AdditiveSyntax
-            import Bls12.b12._
-            assert(g12 * Bls12.q == Infinity)
-        }
-
-        {
-            import Field._
-            import Bls12.f12.Z._
-
-            import Group.AdditiveSyntax
-            import Bls12.b12._
-
-            println("\nThe function ℓ is created to have a specific divisor")
-            assert(Bls12.ℓ(g12, g12 * 2, g12) == zero)
-            assert(Bls12.ℓ(g12, g12 * 2, g12 * 2) == zero)
-            assert(Bls12.ℓ(g12, g12 * 2, g12 * 3) != zero)
-        }
-
-        {
-            import Group.AdditiveSyntax
-            val (a3, a7) = {
-                import Bls12.b._
-
-                (Bls12.g * 3, Bls12.g * 7)
-            }
-
-            val (b3, b7) = {
-                import Bls12.b2._
-
-                (Bls12.g2 * 3, Bls12.g2 * 7)
-            }
-
-
-            println("\nNow we can do pairings!")
-            assert(
-                Bls12.pairing(a3, b7)
-                    ==
-                Bls12.pairing(a7, b3)
-            )
-        }
+      println("\nThe points g and g2 both have order q.")
+      assert(Bls12.g * Bls12.q == Bls12.b.Infinity)
     }
+
+    val g12 = Bls12.twist(Bls12.g2)
+
+    {
+      println("\nWe can twist any point on b2 to a point on b12.")
+      println("The points keeps their order after twisting.")
+
+      import Group.AdditiveSyntax
+      import Bls12.b12._
+      assert(g12 * Bls12.q == Infinity)
+    }
+
+    {
+      import Field._
+      import Bls12.f12.Z._
+
+      import Group.AdditiveSyntax
+      import Bls12.b12._
+
+      println("\nThe function ℓ is created to have a specific divisor")
+      assert(Bls12.ℓ(g12, g12 * 2, g12) == zero)
+      assert(Bls12.ℓ(g12, g12 * 2, g12 * 2) == zero)
+      assert(Bls12.ℓ(g12, g12 * 2, g12 * 3) != zero)
+    }
+
+    {
+      import Group.AdditiveSyntax
+      val (a3, a7) = {
+        import Bls12.b._
+
+        (Bls12.g * 3, Bls12.g * 7)
+      }
+
+      val (b3, b7) = {
+        import Bls12.b2._
+
+        (Bls12.g2 * 3, Bls12.g2 * 7)
+      }
+
+
+      println("\nNow we can do pairings!")
+      assert(
+        Bls12.pairing(a3, b7)
+          ==
+          Bls12.pairing(a7, b3)
+      )
+    }
+  }
 }
